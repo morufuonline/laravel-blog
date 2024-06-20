@@ -57,7 +57,8 @@ class PostController extends Controller
         $search_fields = ['search'];
         $search = GeneralHelper::search("posts", $search_fields);
         $search = $search["search"];
-        $all_posts = Post::when($search, function ($query, $search) {
+        $all_posts = Post::where("user_id", auth()->user()->id)
+        ->when($search, function ($query, $search) {
             $query->where('title', 'LIKE', '%' . $search . '%')->orWhere('body', 'LIKE', '%' . $search . '%');
         }, function ($query) {
             $query->orderByDesc("id");
@@ -115,8 +116,7 @@ class PostController extends Controller
     public function update(PostUpdateRequest $request, Post $post)
     {
         $data = $request->all();
-        $det_user_id = Post::where("id", $post->id)->value("user_id");
-        if($request->user()->id != $det_user_id){
+        if($request->user()->id != $post->user_id){
             return abort(403, "Unauthorized");
         }
         $post->update($data);
@@ -128,6 +128,10 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        if(auth()->user()->id != $post->user_id){
+            return abort(403, "Unauthorized");
+        }
+        Comment::where("post_id", $post->id)->delete();
         $post->delete();
         return redirect('/posts')->with('success', 'Post successfully deleted.');
     }
