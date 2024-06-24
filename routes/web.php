@@ -16,30 +16,39 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-Route::get('/', [PostController::class, 'home']);
-Route::post('/search', [PostController::class, 'search']);
-Route::get('/details/{post}', [PostController::class, 'details'])->where('post', '[0-9]+');
+Route::controller(PostController::class)->group(function(){
+Route::get('/', 'home');
+Route::post('/search', 'search');
+Route::get('/details/{post}', 'details');
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard', ["title" => "Dashboard"]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/posts', [PostController::class, 'index']);
-    Route::get('/posts/view/{post}', [PostController::class, 'show'])->where('post', '[0-9]+');
-    Route::post('/posts/search', [PostController::class, 'posts_search']);
-    Route::get('/posts/create', [PostController::class, 'create']);
-    Route::post('/posts/store', [PostController::class, 'store']);
-    Route::get('/posts/edit/{post}', [PostController::class, 'edit'])->where('post', '[0-9]+');
-    Route::put('/posts/update/{post}', [PostController::class, 'update'])->where('post', '[0-9]+');
-    Route::delete('/posts/delete/{post}', [PostController::class, 'destroy'])->where('post', '[0-9]+');
 
-    Route::post('/comment/{post}', [CommentController::class, 'store'])->where('post', '[0-9]+');
+    Route::controller(PostController::class)->group(function(){
+    Route::get('/posts', 'index')->name('posts');;
+    Route::get('/posts/view/{poster}', 'show');
+    Route::post('/posts/search', 'posts_search');
+    Route::get('/posts/create', 'create');
+    Route::post('/posts/store', 'store');
+    Route::get('/posts/edit/{post}', 'edit');
+    Route::put('/posts/update/{post}', 'update');
+    Route::delete('/posts/delete/{post}', 'destroy');
+    });
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/comment/{post}', [CommentController::class, 'store']);
+
+    Route::controller(ProfileController::class)->group(function(){
+    Route::get('/profile', 'edit')->name('profile.edit');
+    Route::patch('/profile', 'update')->name('profile.update');
+    Route::delete('/profile', 'destroy')->name('profile.destroy');
+    });
+
+    require __DIR__.'/admin.php';
+
 });
 
 require __DIR__.'/auth.php';
