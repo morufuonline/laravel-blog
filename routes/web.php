@@ -34,9 +34,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/posts/search', 'posts_search');
     Route::get('/posts/create', 'create');
     Route::post('/posts/store', 'store');
-    Route::get('/posts/edit/{post}', 'edit');
-    Route::put('/posts/update/{post}', 'update');
-    Route::delete('/posts/delete/{post}', 'destroy');
+    Route::get('/posts/edit/{poster}', 'edit');
+    Route::put('/posts/update/{poster}', 'update');
+    Route::delete('/posts/delete/{poster}', 'destroy');
     });
 
     Route::post('/comment/{post}', [CommentController::class, 'store']);
@@ -46,8 +46,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', 'update')->name('profile.update');
     Route::delete('/profile', 'destroy')->name('profile.destroy');
     });
-
-    require __DIR__.'/admin.php';
 
 });
 

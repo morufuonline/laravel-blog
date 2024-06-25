@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Post;
@@ -24,7 +24,7 @@ class PostUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "title" => ['required', 'min:10', Rule::unique(Post::class)->ignore($this->route('poster')->id)],
+            "title" => ['required', 'min:10', Rule::unique(Post::class)->ignore($this->route('post')->id)],
             "body" => ['required', 'min:10']
         ];
     }

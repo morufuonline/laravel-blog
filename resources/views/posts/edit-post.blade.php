@@ -16,7 +16,7 @@
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6 text-gray-900 dark:text-gray-100">
 
-        <form action="{{ url('posts/update/' . $post->id) }}" method="post" runat="server" autocomplete="off" enctype="multipart/form-data">  
+        <form action="{{ url('posts/update/' . $poster->id) }}" method="post" runat="server" autocomplete="off" enctype="multipart/form-data">  
 
         @csrf
         @method('PUT')
@@ -25,7 +25,7 @@
 
         <label for="title" class="pt-4">Title<span class="required">*</span></label>
         <div class="py-2">
-        <input type="text" name="title" id="title" class="form-control sm:rounded-lg" placeholder="Enter Title" required value="{{ $gen_helper::check_inputted('title', $post->title) }}">
+        <input type="text" name="title" id="title" class="form-control sm:rounded-lg" placeholder="Enter Title" required value="{{ $gen_helper::check_inputted('title', $poster->title) }}">
         </div>
         @error('title')
         <p class="required">{{$message}}</p>
@@ -33,7 +33,7 @@
 
         <label for="body" class="pt-4">Body<span class="required">*</span></label>
         <div class="py-2">
-        <textarea type="text" rows="7" name="body" id="body" class="form-control sm:rounded-lg" placeholder="Enter details" required>{{ $gen_helper::check_inputted('body', $post->body) }}</textarea>
+        <textarea type="text" rows="7" name="body" id="body" class="form-control sm:rounded-lg" placeholder="Enter details" required>{{ $gen_helper::check_inputted('body', $poster->body) }}</textarea>
         </div>
         @error('body')
         <p class="required">{{$message}}</p>

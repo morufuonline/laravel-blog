@@ -40,6 +40,7 @@ class UserFactory extends Factory
                 "admin" => 1,
                 "controller" => 1];
             User::where('id',1)->update($data);
+            User::where('id',2)->update(["admin" => 1]);
         });
     }
 

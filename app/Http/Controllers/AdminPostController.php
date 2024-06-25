@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostStoreRequest;
-use App\Http\Requests\PostUpdateRequest;
+use App\Http\Requests\Admin\PostUpdateRequest;
 use App\Http\Requests\SearchRequest;
 use App\Models\Post;
 use App\Models\Comment;
@@ -19,14 +19,17 @@ class AdminPostController extends Controller
     public function admin_index()
     {
         $search_fields = ['search'];
-        $search = GeneralHelper::search("posts", $search_fields);
+        $search = GeneralHelper::search("admin-posts", $search_fields);
         $search = $search["search"];
-        $all_posts = Post::when($search, function ($query, $search) {
-            $query->where('title', 'LIKE', '%' . $search . '%')->orWhere('body', 'LIKE', '%' . $search . '%');
+        $all_posts = Post::select("posts.id as id", "posts.title as title", "posts.body as body", "posts.created_at as created_at", "users.name as name", "users.email as email")
+        ->leftJoin('users', 'users.id', '=', 'posts.user_id')
+        ->when($search, function ($query, $search) {
+            $query->where('posts.title', 'LIKE', '%' . $search . '%')->orWhere('posts.body', 'LIKE', '%' . $search . '%');
         }, function ($query) {
-            $query->orderByDesc("id");
+            $query->orderByDesc("posts.id");
         })
         ->simplePaginate(8);
+
         $title = "Manage Posts";
         return view('admin.posts.posts', compact('all_posts', 'title'));
     }
@@ -34,7 +37,7 @@ class AdminPostController extends Controller
     public function admin_posts_search(SearchRequest $request)
     {
         $search_fields = ['search'];
-        GeneralHelper::search("posts", $search_fields, 1);
+        GeneralHelper::search("admin-posts", $search_fields, 1);
         return redirect('/admin/posts');
     }
 

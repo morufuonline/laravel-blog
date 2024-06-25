@@ -103,29 +103,29 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Post $post)
+    public function edit($poster)
     {
-        $title = "Edit Post #" . $post->id;
-        return view('posts.edit-post', compact('post', 'title'));
+        $title = "Edit Post #" . $poster->id;
+        return view('posts.edit-post', compact('poster', 'title'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(PostUpdateRequest $request, Post $post)
+    public function update(PostUpdateRequest $request, $poster)
     {
         $data = $request->all();
-        $post->update($data);
+        $poster->update($data);
         return redirect('/posts')->with('success', 'Post updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+    public function destroy($poster)
     {
-        Comment::where("post_id", $post->id)->delete();
-        $post->delete();
+        Comment::where("post_id", $poster->id)->delete();
+        $poster->delete();
         return redirect('/posts')->with('success', 'Post successfully deleted.');
     }
 
