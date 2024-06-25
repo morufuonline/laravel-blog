@@ -20,7 +20,9 @@
 
         <div>{{ $post->body }}</div>
 
+        @if($gen_helper::check_privillege("edit_posts"))
         <div class="mt-4 text-right text-sm text-gray-500 dark:text-gray-400 sm:text-right sm:ml-0"><a href="{{ url('admin/posts/edit/' . $post->id) }}" style="color:#f11;">Edit</a></div>
+        @endif
 
         </div></div>
         @endif

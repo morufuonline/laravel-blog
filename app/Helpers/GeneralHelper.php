@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 use DateTime;
+use App\Models\RoleManagement;
 
 class GeneralHelper{
 
@@ -66,7 +67,6 @@ class GeneralHelper{
 		}
 	}
 
-
     public static function special_date($data){
         $result = "";
         $datetime1 = new DateTime($data);
@@ -99,6 +99,10 @@ class GeneralHelper{
         }
         
         return $result;
+    }
+
+    public static function check_privillege($role_col){
+        return auth()->user()->controller ? 1 : RoleManagement::where('id', auth()->user()->role)->value($role_col);
     }
 
 }
