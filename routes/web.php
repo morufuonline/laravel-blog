@@ -29,7 +29,7 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
 
     Route::controller(PostController::class)->group(function(){
-    Route::get('/posts', 'index')->name('posts');;
+    Route::get('/posts', 'index')->name('posts');
     Route::get('/posts/view/{poster}', 'show');
     Route::post('/posts/search', 'posts_search');
     Route::get('/posts/create', 'create');
